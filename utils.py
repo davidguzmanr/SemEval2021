@@ -32,6 +32,12 @@ def remove_symbols(index, text):
                         
     return index_clean
 
+def completely_toxic(span, text):
+    if span == []:
+        return [i for i in range(len(text))]
+    else:
+        return span      
+
 def separate_words(indices):
     """
     Separa los índices por palabras.
