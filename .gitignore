@@ -1,3 +1,6 @@
 toxic_speech.crfsuite
 .ipynb_checkpoints
 /__pycache__
+spans-pred.txt
+spans-pred.zip
+output_file.zip
