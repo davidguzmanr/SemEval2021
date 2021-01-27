@@ -18,10 +18,12 @@ cd Toxic-Spans
 source bin/activate
 ```
 
-Posteriormente descargar clonar el repositorio e instalar los requerimientos:
+Posteriormente clonar el repositorio e instalar los requerimientos:
 
 ```
 git clone https://github.com/Mgczacki/Proyecto_PLN.git
 cd Proyecto_PLN
 pip install -r requirements.txt
 ```
+
+La libreta [Results LSTM](https://github.com/Mgczacki/Proyecto_PLN/blob/main/Notebooks/Results%20LSTM.ipynb) contiene nuestros resultados con el mejor modelo que encontramos.
