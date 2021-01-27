@@ -1,8 +1,6 @@
 toxic_speech.crfsuite
 **/.ipynb_checkpoints
 **/.vector_cache
-/__pycache__
-spans-pred.txt
+**/__pycache__
 spans-pred.zip
-output_file.zip
-/Notebooks/Models/test*
+/Notebooks/Models/best-model-LSTM.pt
