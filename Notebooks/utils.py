@@ -4,6 +4,7 @@ from itertools import chain
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import ast
 from nltk import pos_tag
 from nltk.tokenize import word_tokenize
 from sklearn.metrics import classification_report, confusion_matrix
@@ -172,6 +173,37 @@ def plot_loss_and_score(train_loss, test_loss, f1_scores_train, f1_scores_test, 
     if show:
         plt.show()
 
+# Lo siguiente es para la LSTM
+
+from torchtext.data import Field
+from torchtext.vocab import GloVe
+
+def get_vocab():
+    train = pd.read_csv('../Datos/tsd_train.csv', converters={'spans':ast.literal_eval})
+    train['text'] = train['text'].apply(lambda x:x.lower())
+
+
+    # Aquí había un problema, estábamos usando 2 tokenizadores diferentes para sacar los
+    # embeddings y para preprocesar el texto para entrenar. Pondré el de SpaCy como 
+    # tokenizador en común con el corpus de 'en_core_web_md'
+
+    text_field = Field(
+        tokenize='spacy',
+        tokenizer_language='en_core_web_md',
+        lower=True
+    )
+    label_field = Field(sequential=False, use_vocab=False)
+    # sadly have to apply preprocess manually
+    preprocessed_text = train['text'].apply(lambda x: text_field.preprocess(x))
+    # load fastext simple embedding with 200d
+    text_field.build_vocab(
+        preprocessed_text, 
+        vectors='glove.twitter.27B.200d'
+    )
+    # get the vocab instance
+    vocab = text_field.vocab
+
+    return vocab
 
 
 ##################################################
