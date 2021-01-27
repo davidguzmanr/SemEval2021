@@ -1,6 +1,8 @@
 toxic_speech.crfsuite
-.ipynb_checkpoints
+**/.ipynb_checkpoints
+**/.vector_cache
 /__pycache__
 spans-pred.txt
 spans-pred.zip
 output_file.zip
+/Notebooks/Models/test*
