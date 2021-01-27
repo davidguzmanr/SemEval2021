@@ -1,5 +1,5 @@
 **/.ipynb_checkpoints
 **/.vector_cache
-__pycache__
 spans-pred.zip
 /Notebooks/Models/best-model-LSTM.pt
+Notebooks/__pycache__
