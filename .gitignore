@@ -2,4 +2,4 @@
 **/.vector_cache
 spans-pred.zip
 /Notebooks/Models/best-model-LSTM.pt
-Notebooks/__pycache__
+Notebooks/__pycache__/
