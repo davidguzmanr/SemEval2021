@@ -1,5 +1,5 @@
 **/.ipynb_checkpoints
 **/.vector_cache
-**/.__pycache__
+**/__pycache__
 /Notebooks/Models/*.pt
 
