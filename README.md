@@ -1,29 +1,26 @@
-# Proyecto PLN
-Proyecto de la materia  de Procesamiento de Lenguaje Natural
+# SemEval2021
+Final project for my *Natural Language Processing* class. Made in collaboration with [Mgczacki](https://github.com/Mgczacki) and [roher1727](https://github.com/roher1727).
 
 ## Toxic Spans Detection
 
-Los datos se encuentran en [Codalab](https://competitions.codalab.org/competitions/25623), son alrededor de 10 mil publicaciones que provienen del [Civil Comments dataset](https://www.tensorflow.org/datasets/catalog/civil_comments) en las que se han etiquetado tramos específicos como lenguaje tóxico, la tarea es poder entrenar un modelo que detecte estos tramos tóxicos.
+The original dataset is in [Codalab](https://competitions.codalab.org/competitions/25623), it consists of around 10 thousand publications that come from [Civil Comments dataset](https://www.tensorflow.org/datasets/catalog/civil_comments), in which specific sections have been labeled as toxic language, the task is to be able to train a model that detects these toxic sections.
 
-Para correr el modelo lo más sencillo es hacer un ambiente virtual:
-
-```
-virtualenv Toxic-Spans
-```
-
-Para activarlo:
+First, create a virtual environment:
 
 ```
-cd Toxic-Spans
-source bin/activate
+virtualenv toxic-spans-venv
 ```
 
-Posteriormente clonar el repositorio e instalar los requerimientos:
+To activate it:
 
 ```
-git clone https://github.com/Mgczacki/Proyecto_PLN.git
-cd Proyecto_PLN
+source toxic-spans-venv/bin/activate
+```
+
+Then clone this repository and install the requirements:
+
+```
+git clone https://github.com/davidguzmanr/SemEval2021.git
+cd SemEval2021
 pip install -r requirements.txt
 ```
-
-La libreta [Results LSTM](https://github.com/Mgczacki/Proyecto_PLN/blob/main/Notebooks/Results%20LSTM.ipynb) contiene nuestros resultados con el mejor modelo que encontramos.
