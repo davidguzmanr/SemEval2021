@@ -1,13 +1,21 @@
 import string
 from termcolor import colored
 
-def color_toxic_words(index, text):
-    colored_string = ''
-    for i,x in enumerate(text):
-        if i in index:
-            colored_string += colored(x, on_color='on_red')
-        else:
-            colored_string += colored(x)
+def color_toxic_words(index, text, html=False):
+    if not html:
+        colored_string = ''
+        for i,x in enumerate(text):
+            if i in index:
+                colored_string += colored(x, on_color='on_red')
+            else:
+                colored_string += colored(x)
+    else:
+        colored_string = ''
+        for i,x in enumerate(text):
+            if i in index:
+                colored_string += f'<span style="background-color: #FF0000">{x}</span>'
+            else:
+                colored_string += x
             
     return colored_string
 
