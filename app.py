@@ -3,11 +3,11 @@ import streamlit as st
 import torch
 import torch.nn as nn
 
+import pandas as pd
 from os.path import exists
 import gdown
-import pandas as pd
+import branca.colormap as cm
 
-from notebooks.utils.processing import get_index_toxic_words, color_toxic_words
 from notebooks.utils.lstm import spacy_tokenizer, get_vocab
 
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
@@ -41,24 +41,30 @@ def prepare_sequence_tags(seq):
     idxs = [tag_to_ix[s] for s in seq]
     return torch.tensor(idxs, dtype=torch.long, device=device)
 
-def tagger_LSTM(model, vocab, text, threshold=0.5):
+def tagger_LSTM(model, vocab, text):
     """
     Performs the tagging with the LSTM model we trained.
     """
     # ix_to_tag = {0: 'non_toxic', 1: 'toxic'}
-    words = spacy_tokenizer(text.lower())
-    
+    # words = spacy_tokenizer(text.lower())
+    words = text.split()
     if text:
         with torch.no_grad():
             inputs = prepare_sequence(vocab, words)
-            tag_scores = model(inputs)
-            
-            tags = [1 if x > threshold else 0 for x in tag_scores]
-            tagged_sentence = list(zip(words, tags))
+            tag_scores = model(inputs).cpu().numpy().reshape(-1)
+            tagged_sentence = list(zip(words, tag_scores))
 
         return tagged_sentence
     else:
         return []
+
+def highlight_toxic_words(tagged_sentence):
+    colormap = cm.LinearColormap(colors=['#FFFFFF', '#FF0000'], vmin=0.0, vmax=1.0)
+    colored_string = ''
+    for (word, score) in tagged_sentence:
+        colored_string += f'<span style="background-color: {colormap(score)}">{word}</span> '
+
+    return colored_string
 
 @st.cache(allow_output_mutation=True)
 def load_model():
@@ -81,6 +87,11 @@ get_vocab = st.cache(get_vocab, allow_output_mutation=True)
 # SemEval 2021 Task 5: Toxic Spans Detection
 """
 st.sidebar.image('images/toxic.jpg')
+description = """
+*Model to detect toxic spans for the [SemEval 2021](https://competitions.codalab.org/competitions/25623) competition.*
+"""
+
+st.sidebar.markdown(description)
 
 text = """
 <div style="text-align: justify"> 
@@ -104,7 +115,7 @@ As a complete submission for the Shared Task, systems will have to extract a lis
 span we define a sequence of words that attribute to the text's toxicity.
 <br><br>
 First we tried with a HMM and a CRF, but both of them had poor results. Then we tried with a LSTM to make the tagging and it worked
-better. You can try the model here:
+better. You can try the model here (the more red a word is highlighted the more toxic it is):
 <br><br>
 </div>
 """
@@ -115,18 +126,16 @@ train_df = pd.read_csv('data/tsd_train.csv')
 vocab = get_vocab(train_df)
 model = load_model()
 
-text = st.text_input(label='Text', value='This is a stupid example, try your own toxic text', max_chars=150)
+input_text = st.text_input(label='Text', value='This is a stupid and kinda silly example, try your own toxic text here', max_chars=150)
 
-tagged_sentence = tagger_LSTM(model, vocab, text)
-prediction_index = get_index_toxic_words(text.lower(), tagged_sentence)
-predicted_text = color_toxic_words(prediction_index, text, html=True)
-
-st.markdown(predicted_text, unsafe_allow_html=True)
+tagged_sentence = tagger_LSTM(model, vocab, input_text)
+highlighted_sentence = highlight_toxic_words(tagged_sentence)
+st.markdown(highlighted_sentence, unsafe_allow_html=True)
 
 text = """
 <div style="text-align: justify"> 
 <br><br>
-The F1 score of the LSTM in the evaluation dataset was 64.88, which was quite low. However, even the winners of this task just managed to get around 70. 
+The F1 score of the LSTM in the evaluation dataset was 64.88, which was rather low. However, even the winners of this task just managed to get around 70. 
 We believe the low scores are due to the fact the training dataset was poorly tagged.
 """
 

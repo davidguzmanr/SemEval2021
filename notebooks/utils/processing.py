@@ -1,17 +1,30 @@
-import string
 from termcolor import colored
+import branca.colormap as cm
+import string
+
+
+def highlight_toxic_words(tagged_sentence):
+    """
+    Add more thing so this does'nt
+    """
+    colormap = cm.LinearColormap(colors=['#17FF00', '#FF0000'], vmin=0.0, vmax=1.0)
+    colored_string = ''
+    for (word, score) in tagged_sentence:
+        colored_string += f'<span style="background-color: #{colormap(score)}">{word}</span>'
+
+    return colored_string
 
 def color_toxic_words(index, text, html=False):
     if not html:
         colored_string = ''
-        for i,x in enumerate(text):
+        for i, x in enumerate(text):
             if i in index:
                 colored_string += colored(x, on_color='on_red')
             else:
                 colored_string += colored(x)
     else:
         colored_string = ''
-        for i,x in enumerate(text):
+        for i, x in enumerate(text):
             if i in index:
                 colored_string += f'<span style="background-color: #FF0000">{x}</span>'
             else:
